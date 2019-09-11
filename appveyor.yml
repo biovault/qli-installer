@@ -14,10 +14,13 @@ environment:
     
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+            # see https://github.com/conan-io/conan-package-tools for all environment options
           CONAN_VISUAL_VERSIONS: 15
           CONAN_VISUAL_RUNTIMES: MD
           CONAN_ARCHS: x86_64
           CONAN_BUILD_TYPES: Release
+            # for Qt5.9.8 no webglplugin
+          CONAN_OPTIONS: "webglplugin=False"
 
 install:
   - set PATH=%PYTHON_HOME%;%PYTHON_HOME%/Scripts/;%PATH%
