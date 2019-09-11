@@ -102,7 +102,7 @@ class QtConan(ConanFile):
         if self.settings.os == "Windows":
             self.options.target = "desktop" 
         if self.settings.os == "Macos":
-            self.options.target = "ios" 
+            self.options.target = "desktop" 
             
 
     def build(self):
