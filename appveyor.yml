@@ -34,7 +34,7 @@ notifications:
   - provider: Email
     to: 
         - b.van_lew@lumc.nl
-    subject: Test hdps-core {{status}}
+    subject: Qt package from install {{status}}
     message: "URL is {{buildUrl}} Commit ID {{commitId}}."
     on_build_success: true
     on_build_failure: true
