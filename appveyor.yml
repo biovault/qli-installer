@@ -14,6 +14,7 @@ environment:
     
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          ARCH: x86_64
           CONAN_VISUAL_VERSIONS: 15
 
 install:
