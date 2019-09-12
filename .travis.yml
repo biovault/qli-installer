@@ -60,4 +60,4 @@ script:
    -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
    -  chmod +x .ci/run.sh
    - ./.ci/run.sh
-   - conan upload qt/5.10.1@lkeb/stable -r lkeb_repo 
+   - conan upload qt/5.10.1@lkeb/stable -r lkeb_repo --all
