@@ -50,10 +50,11 @@ class QtConan(ConanFile):
         "datavis3d", 
         "charts", 
         "networkauth", 
-        "purchasing"]
+        "purchasing",
+        "remoteobjects"]
 
     name = "qt"
-    version = "5.10.1"
+    version = "5.11.3"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"
@@ -75,7 +76,8 @@ class QtConan(ConanFile):
         "datavis3d": [True, False], 
         "charts": [True, False],
         "networkauth": [True, False],
-        "purchasing": [True, False]       
+        "purchasing": [True, False],
+        "remoteobjects": [True, False]
     })
     no_copy_source = True
     default_options = dict({
@@ -90,7 +92,8 @@ class QtConan(ConanFile):
         "datavis3d": True, 
         "charts": True,
         "networkauth": True,
-        "purchasing": True          
+        "purchasing": True,
+        "remoteobjects": True,
     })
 
     short_paths = True
