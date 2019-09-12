@@ -48,7 +48,8 @@ matrix:
         addons:
           homebrew:
               packages:
-                  - p7zip          
+                  - p7zip  
+                  - conan
 
 install:
   - chmod +x .ci/install.sh
