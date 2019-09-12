@@ -53,8 +53,8 @@ install:
   - ./.ci/install.sh
 
 script:
-  - chmod +x .ci/run.sh
-  - ./.ci/run.sh
   - conan remote add lkeb_conan http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local
   - conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_conan -p "${CONAN_PASSWORD}"
+  - chmod +x .ci/run.sh
+  - ./.ci/run.sh
   - travis_wait conan upload --all lkeb_conan 
