@@ -5,8 +5,7 @@ env:
       -  CONAN_USERNAME: "lkeb" # name used for package naming
       -  CONAN_CHANNEL: "stable" # channel used for package naming 
       -  CONAN_LOGIN_USERNAME: "admin"
-      -  CONAN_PASSWORD: $CONAN_PASSWORD_SECRET 
-      -  CONAN_UPLOAD_ONLY_WHEN_STABLE: 1        
+      -  CONAN_PASSWORD: $CONAN_PASSWORD_SECRET       
 
 branches:
   only:
