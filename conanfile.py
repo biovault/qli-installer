@@ -76,8 +76,7 @@ class QtConan(ConanFile):
         "datavis3d": [True, False], 
         "charts": [True, False],
         "networkauth": [True, False],
-        "purchasing": [True, False],
-        "remoteobjects": [True, False]
+        "purchasing": [True, False]
     })
     no_copy_source = True
     default_options = dict({
@@ -92,8 +91,7 @@ class QtConan(ConanFile):
         "datavis3d": True, 
         "charts": True,
         "networkauth": True,
-        "purchasing": True,
-        "remoteobjects": True,
+        "purchasing": True
     })
 
     short_paths = True
