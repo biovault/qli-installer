@@ -55,4 +55,8 @@ install:
   - ./.ci/install.sh
 
 script:
-  - conan remote add upload_repo http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local && conan user "${CONAN_LOGIN_USERNAME}" -r upload_repo -p "${CONAN_PASSWORD}" && chmod +x .ci/run.sh && ./.ci/run.sh && travis_wait 20 conan upload qt/5.10.1@lkeb/stable -r upload_repo 
+   - conan remote add lkeb_repo http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local
+   -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
+   -  chmod +x .ci/run.sh
+   - ./.ci/run.sh
+   - travis_wait 20 conan upload qt/5.10.1@lkeb/stable -r lkeb_repo 
