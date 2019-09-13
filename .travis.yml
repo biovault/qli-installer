@@ -32,7 +32,6 @@ matrix:
       - <<: *linux
         env: 
             - CONAN_GCC_VERSIONS=9
-              CONAN_OPTIONS="webglplugin=False"
               CONAN_ARCHS=x86_64
               CONAN_BUILD_REQUIRES 
               CONAN_BUILD_TYPES=Release 
@@ -42,7 +41,6 @@ matrix:
         osx_image: xcode10.3
         env: 
             - CONAN_APPLE_CLANG_VERSIONS=10.0
-              CONAN_OPTIONS="webglplugin=False"
               CONAN_ARCHS=x86_64
               CONAN_BUILD_TYPES=Release 
         addons:
