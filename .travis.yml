@@ -60,4 +60,4 @@ script:
    -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
    -  chmod +x .ci/run.sh
    - ./.ci/run.sh
-   - travis_wait 30 conan upload qt/5.12.4@lkeb/stable -r lkeb_repo --all
+   - travis_wait 30 conan upload qt/5.10.1@lkeb/stable -r lkeb_repo --all
