@@ -32,7 +32,6 @@ matrix:
       - <<: *linux
         env: 
             - CONAN_GCC_VERSIONS=9
-              CONAN_OPTIONS="webglplugin=False"
               CONAN_ARCHS=x86_64
               CONAN_BUILD_REQUIRES 
               CONAN_BUILD_TYPES=Release 
@@ -42,7 +41,6 @@ matrix:
         osx_image: xcode10.3
         env: 
             - CONAN_APPLE_CLANG_VERSIONS=10.0
-              CONAN_OPTIONS="webglplugin=False"
               CONAN_ARCHS=x86_64
               CONAN_BUILD_TYPES=Release 
         addons:
@@ -60,4 +58,4 @@ script:
    -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
    -  chmod +x .ci/run.sh
    - ./.ci/run.sh
-   - travis_wait 30 conan upload qt/5.12.4@lkeb/stable -r lkeb_repo --all
+   - travis_wait 40 conan upload qt/5.12.4@lkeb/stable -r lkeb_repo --all
