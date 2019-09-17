@@ -156,7 +156,7 @@ class QtConan(ConanFile):
         
     def package(self):
         binroot = self._get_bin_root()
-        with tools.chdir(binroot)
+        with tools.chdir(binroot):
             self.copy("*")
 
     def package_info(self):
