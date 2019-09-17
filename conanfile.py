@@ -109,6 +109,7 @@ class QtConan(ConanFile):
     def _get_bin_root(self):
         binroot = None
         for root, dirs, filed in os.walk(os.getcwd()):
+            print("Walking: ", root)
             if "mkspecs" in dirs:
                 binroot = None
                 break
