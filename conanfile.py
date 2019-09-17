@@ -106,6 +106,17 @@ class QtConan(ConanFile):
             self.options.target = "desktop" 
             
 
+    def _get_bin_root(self):
+        binroot = None
+        for root, dirs, filed in os.walk(os.getcwd()):
+            if "mkspecs" in dirs:
+                binroot = None
+                break
+        if binroot is None:
+            raise RuntimeError("Couldn't locate the package root")
+        return binroot
+        
+        
     def build(self):
         common_args = dict({})
         os_args = dict({})
@@ -144,7 +155,9 @@ class QtConan(ConanFile):
         install_qt(common_args, os_args)
         
     def package(self):
-        self.copy("*")
+        binroot = self._get_bin_root()
+        with tools.chdir(binroot)
+            self.copy("*")
 
     def package_info(self):
         if self.settings.os == "Windows":
