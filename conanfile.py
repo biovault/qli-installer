@@ -156,8 +156,7 @@ class QtConan(ConanFile):
         
     def package(self):
         binroot = self._get_bin_root()
-        with tools.chdir(binroot):
-            self.copy("*")
+        self.copy("*", src=binroot)
 
     def package_info(self):
         if self.settings.os == "Windows":
