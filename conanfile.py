@@ -145,7 +145,7 @@ class QtConan(ConanFile):
         install_qt(common_args, os_args)
         
     def package(self):
-        self.copy("*")
+        self.copy("*", symlinks=True)
 
     def package_info(self):
         if self.settings.os == "Windows":
