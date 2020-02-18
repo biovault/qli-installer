@@ -53,7 +53,7 @@ class QtConan(ConanFile):
         "purchasing"]
 
     name = "qt"
-    version = "5.9.8"
+    version = "5.5"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"
@@ -84,13 +84,13 @@ class QtConan(ConanFile):
         "opengl": "desktop",
         "openssl": True,
         "webengine": True,
-        "webglplugin": True,
-        "virtualkeyboard": True,
+        "webglplugin": False,
+        "virtualkeyboard": False,
         "script": True,
-        "datavis3d": True, 
-        "charts": True,
-        "networkauth": True,
-        "purchasing": True          
+        "datavis3d": False, 
+        "charts": False,
+        "networkauth": False,
+        "purchasing": False          
     })
 
     short_paths = True
@@ -117,6 +117,8 @@ class QtConan(ConanFile):
             "Windows15x86_64": "win64_msvc2017_64", 
             "Windows14x86": "win32_msvc2015", 
             "Windows14x86_64": "win64_msvc2015_64",
+            "Windows12x86": "win32_msvc2013", 
+            "Windows12x86_64": "win64_msvc2013_64",            
             "Linux": "gcc_64",
             "Macos": "clang_64"
         })

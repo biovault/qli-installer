@@ -79,7 +79,7 @@ def install_archives(archives, archives_url, full_version):
         url = archives_url + full_version + archive
 
         sys.stdout.write("\033[K")
-        print("Downloading {}...".format(archive), end="\r")
+        print("Downloading {}...".format(url), end="\r")
         tools.download(url, "package.7z")
 
         sys.stdout.write("\033[K")
@@ -126,7 +126,12 @@ def install_qt(common_args, os_args):
     # Qt version
     version = common_args["qt_version"].split(".")
     print("version", version)
-    qt_ver_num = "5{0}{1}".format(version[1], version[2])
+    if len(version) == 3 :
+        qt_ver_num = "5{0}{1}".format(version[1], version[2])
+    elif len(version) == 2 :
+        qt_ver_num = "5{0}".format(version[1])  
+    else:
+        raise RuntimeError('This requires at least x.y and at most x.y.z versioning')
     # one of: "linux", "mac", "windows"
     os_name = str(common_args["host_system"])
     print("OS name", os_name)

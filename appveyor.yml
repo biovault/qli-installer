@@ -17,9 +17,9 @@ environment:
     CONAN_UPLOAD_ONLY_WHEN_STABLE: 1
     
     matrix:
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
             # see https://github.com/conan-io/conan-package-tools for all environment options
-          CONAN_VISUAL_VERSIONS: 15
+          CONAN_VISUAL_VERSIONS: 12
           CONAN_VISUAL_RUNTIMES: MD
           CONAN_ARCHS: x86_64
           CONAN_BUILD_TYPES: Release
