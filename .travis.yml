@@ -45,6 +45,7 @@ matrix:
               CONAN_OPTIONS="webglplugin=False"
               CONAN_ARCHS=x86_64
               CONAN_BUILD_TYPES=Release 
+              CONAN_SKIP_BROKEN_SYMLINKS_CHECK=True
         addons:
           homebrew:
               packages:
