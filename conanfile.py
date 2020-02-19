@@ -30,6 +30,7 @@ from conans import ConanFile, tools
 from conans.errors import ConanInvalidConfiguration
 from conans.model import Generator
 from installutils import install_qt
+from conans.client.file_copier import FileCopier
 
 class qt(Generator):
     @property
@@ -145,7 +146,9 @@ class QtConan(ConanFile):
         install_qt(common_args, os_args)
         
     def package(self):
-        self.copy("*", symlinks=False)
+        myCopy = FileCopier([self.build_folder], self.package_folder)
+        myCopy("*", symlinks=True)
+        #self.copy("*", symlinks=True)
 
     def package_info(self):
         if self.settings.os == "Windows":
