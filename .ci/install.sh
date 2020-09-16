@@ -4,7 +4,7 @@ set -ex
 
 if [[ "$(uname -s)" == 'Darwin' ]]; then
     unset PYENV_ROOT
-    brew update
+    export HOMEBREW_NO_AUTO_UPDATE=1
     brew install openssl readline
     brew outdated pyenv || brew upgrade pyenv
     brew install pyenv-virtualenv
