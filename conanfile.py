@@ -53,7 +53,7 @@ class QtConan(ConanFile):
         "purchasing"]
 
     name = "qt"
-    version = "5.12.2"
+    version = "5.15.1"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"
@@ -64,7 +64,6 @@ class QtConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
 
     options = dict({
-        "shared": [True, False],
         "target": ["desktop", "android", "ios"],
         "commercial": [True, False],
         "opengl": ["no", "es2", "desktop", "dynamic"],
@@ -80,7 +79,6 @@ class QtConan(ConanFile):
     })
     no_copy_source = True
     default_options = dict({
-        "shared": True,
         "commercial": False,
         "target": "desktop",
         "opengl": "desktop",
@@ -104,7 +102,7 @@ class QtConan(ConanFile):
         if self.settings.os == "Windows":
             self.options.target = "desktop" 
         if self.settings.os == "Macos":
-            self.options.target = "ios" 
+            self.options.target = "desktop" 
             
 
     def build(self):

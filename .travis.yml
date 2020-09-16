@@ -1,3 +1,18 @@
+env:
+    global: 
+      -  CONAN_STABLE_BRANCH_PATTERN: "stable/*"
+      -  CONAN_UPLOAD: http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local
+      -  CONAN_USERNAME: "lkeb" # name used for package naming
+      -  CONAN_CHANNEL: "stable" # channel used for package naming 
+      -  CONAN_LOGIN_USERNAME: "admin"
+      -  CONAN_PASSWORD: $CONAN_PASSWORD_SECRET 
+      -  CONAN_UPLOAD_ONLY_WHEN_TAG: 1
+      -  CONAN_UPLOAD_ONLY_WHEN_STABLE: 1        
+
+branches:
+  only:
+  - stable/5.15.1  
+  
 linux: &linux
    os: linux
    dist: xenial
@@ -11,15 +26,36 @@ osx: &osx
 matrix:
    include:
       - <<: *linux
-        env: CONAN_GCC_VERSIONS=9 CONAN_DOCKER_IMAGE=conanio/gcc9
+        env: 
+            - CONAN_GCC_VERSIONS=9
+              CONAN_ARCHS=x86_64
+              CONAN_BUILD_REQUIRES 
+              CONAN_BUILD_TYPES=Release 
+        before_install:
+            - sudo apt-get install -y p7zip-full
       - <<: *osx
         osx_image: xcode10.3
-        env: CONAN_APPLE_CLANG_VERSIONS=10.0
+        env: 
+            - CONAN_APPLE_CLANG_VERSIONS=10.0
+              CONAN_ARCHS=x86_64
+              CONAN_BUILD_TYPES=Release 
+        addons:
+          homebrew:
+              packages:
+                  - p7zip 
+                  - conan
 
 install:
   - chmod +x .ci/install.sh
   - ./.ci/install.sh
 
 script:
-  - chmod +x .ci/run.sh
-  - ./.ci/run.sh
+   - conan remote add lkeb_repo http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local
+   -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
+   -  chmod +x .ci/run.sh
+   - ./.ci/run.sh
+   - travis_wait 40 conan upload qt/5.15.1@lkeb/stable -r lkeb_repo --all
+   
+notifications:
+    email:
+        - b.van_lew@lumc.nl
