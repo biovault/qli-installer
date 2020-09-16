@@ -11,7 +11,7 @@ env:
 
 branches:
   only:
-  - stable/5.15.1  
+  - stable/5.15.0  
   
 linux: &linux
    os: linux
