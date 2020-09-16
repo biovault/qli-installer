@@ -151,10 +151,10 @@ def install_qt(common_args, os_args):
         arch = os_args["arch"]
         # See https://bugreports.qt.io/browse/QTBUG-84559 for msvc2017 use msvc2019 
         # for version 5.15 (and higher?)
-        if os_name == "windows" and version[1] == "15"
+        if os_name == "windows" and version[1] == "15":
             if arch == "win64_msvc2017_64":
                 arch = "win64_msvc2019_64"
-            if arch == "win32_msvc2017_64"":
+            if arch == "win32_msvc2017_64":
                 arch = "win32_msvc2019_64"
     elif os_name == "linux" and target == "desktop":
         arch = "gcc_64"
