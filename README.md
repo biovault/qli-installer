@@ -1,4 +1,4 @@
-## A conan tool for installing QT based on the installer
+## A conan tool for packaging QT based on the install packages
 
 Building QT, especially QT plus optional packages is difficult and slow. 
 For example the build in including webengine does not fit in the free plans of the CI vendors (at time of writing 6 hours on Azure).

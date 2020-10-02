@@ -55,6 +55,11 @@ install:
   - ./.ci/install.sh
 
 script:
+   - |
+     if [[ "$(uname -s)" == 'Darwin' ]]; then
+        if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+        pyenv activate conan
+     fi
    - conan remote add lkeb_repo http://cytosplore.lumc.nl:8081/artifactory/api/conan/conan-local
    -  conan user "${CONAN_LOGIN_USERNAME}" -r lkeb_repo -p "${CONAN_PASSWORD}" 
    -  chmod +x .ci/run.sh
