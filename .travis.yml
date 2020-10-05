@@ -44,11 +44,6 @@ matrix:
             - CONAN_APPLE_CLANG_VERSIONS=10.0
               CONAN_ARCHS=x86_64
               CONAN_BUILD_TYPES=Release 
-        addons:
-          homebrew:
-              packages:
-                  - p7zip 
-                  - conan
 
 install:
   - chmod +x .ci/install.sh

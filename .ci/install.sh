@@ -10,7 +10,7 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     if which pyenv > /dev/null; then
         eval "$(pyenv init -)"
     fi
-
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install p7zip
     pyenv install 3.7.1
     pyenv virtualenv 3.7.1 conan
     pyenv rehash
