@@ -70,7 +70,7 @@ def findPackage(qt_ver_num="", arch="", packages_url="", update_xml=None, packna
                 archives_url += '/'
                 break
         if not full_version or not archives:
-            print("Error while parsing package information for {}!", packname)
+            print("Error while parsing package information for {} {} {} {} {}!".format(qt_ver_num, arch, packages_url, update_xml, packname))
             exit(1) 
         return package_desc, full_version, archives, archives_url
 
@@ -116,9 +116,12 @@ def install_qt(common_args, os_args):
                 mac/desktop: "clang_64"
                 mac/ios: "ios"
                 windows/desktop: one of 
-                    "win64_msvc2017_64, "win64_msvc2015_64",
+                    "win64_msvc2019_64, win64_msvc2017_64, "win64_msvc2015_64",
                     "win32_msvc2015", "win32_mingw53"
                 */android: "android_x86", "android_armv7" 
+
+    Quirks for 5.15 (and greater?) no 2017 is available but 2019 is supposed to
+    be binary compatible. So we replace 2017 by 2019
     """
     package_list = common_args["packages"]
     base_url = "https://download.qt.io/online/qtsdkrepository/"
@@ -139,13 +142,20 @@ def install_qt(common_args, os_args):
     # linux/desktop:   "gcc_64"
     # mac/desktop:     "clang_64"
     # mac/ios:         "ios"
-    # windows/desktop: "win64_msvc2017_64, "win64_msvc2015_64",
+    # windows/desktop: "win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64",
     #                    "win32_msvc2015", "win32_msvc2017", 
     #                  "win32_msvc2015", "win32_mingw53"
     # */android:       "android_x86", "android_armv7"
     arch = ""
     if os_args["arch"]:
         arch = os_args["arch"]
+        # See https://bugreports.qt.io/browse/QTBUG-84559 for msvc2017 use msvc2019 
+        # for version 5.15 (and higher?)
+        if os_name == "windows" and version[1] == "15":
+            if arch == "win64_msvc2017_64":
+                arch = "win64_msvc2019_64"
+            if arch == "win32_msvc2017_64":
+                arch = "win32_msvc2019_64"
     elif os_name == "linux" and target == "desktop":
         arch = "gcc_64"
     elif os_name == "mac" and target == "desktop":

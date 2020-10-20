@@ -83,7 +83,7 @@ if __name__ == "__main__":
     windowsParser = argparse.ArgumentParser(description="Install for Windows", parents=[baseParser])
     windowsParser.add_argument("target", choices = ["desktop", "android"], help="target platform")
     windowsParser.add_argument("-a", "--arch", 
-        choices = ["win64_msvc2017_64", "win64_msvc2015_64", "win32_msvc2015", "win32_mingw53"], 
+        choices = ["win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64", "win32_msvc2015", "win32_mingw53"], 
         help="supported architectures")
 
     args = baseParser.parse_known_args()
