@@ -54,15 +54,24 @@ jobs:
       - name: Package Qt for current OS using conan
         run: |
           export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
-
+          echo Setting up a conan profile used to choose OS version
           conan profile new action_build
-          conan profile update settings.os=${{ matrix.build-os }} action_build
-          conan profile update settings.os_build=${{ matrix.build-os }} action_build
           conan profile update settings.arch=x86_64 action_build
           conan profile update settings.arch_build=x86_64 action_build
-          conan profile update settings.compiler=${{ matrix.build-compiler }} action_build
-          conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
-          conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
+          if [[ $RUNNER_OS == "Windows" ]]; then
+            conan profile update settings.os=Windows action_build
+            conan profile update settings.os_build=Windows action_build
+            conan profile update settings.compiler="Visual Studio" action_build
+            conan profile update settings.compiler.runtime=${{ matrix.build-runtime }} action_build
+            conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
+          else
+            conan profile update settings.os=${{ matrix.build-os }} action_build
+            conan profile update settings.os_build=${{ matrix.build-os }} action_build
+            conan profile update settings.compiler=${{ matrix.build-compiler }} action_build
+            conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
+            conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
+          fi
+          conan profile update settings.build_type=${{ matrix.build-config }} action_build
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
 
