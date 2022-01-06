@@ -5,13 +5,13 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   # Job to buildwheels on all platforms
   build_wheels:
-    name: Build wheels on ${{ matrix.job-name}}
+    name: Build wheels on ${{ matrix.name}}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
           - name: Windows-msvc2017
-            os: windows-2016
+            os: windows-2019
             compiler: msvc-2017
             build-cversion: 15
             build-runtime: MD
@@ -51,13 +51,7 @@ jobs:
           remote_user: ${{secrets.LKEB_ARTIFACTORY_USER}}
           remote_password: ${{secrets.LKEB_ARTIFACTORY_PASSWORD}}
 
-      - name: Windows build
-        if: "startsWith(runner.os, 'Windows')"
-        run: |
-          echo No windows build at the moment
-
-      - name: Linux Mac build
-        if: "!startsWith(runner.os, 'Windows')"
+      - name: Package Qt for current OS using conan
         run: |
           export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
 
