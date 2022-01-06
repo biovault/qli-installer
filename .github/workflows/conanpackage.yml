@@ -67,3 +67,4 @@ jobs:
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
 
           conan create . lkeb/stable --profile action_build
+        shell: bash
