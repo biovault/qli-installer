@@ -55,8 +55,9 @@ runs:
       # Including fix the certificate chain
       run: |
         conan user
-        conanhome=`conan config home`
+        export conanhome=`conan config home`
         ls -l $GITHUB_ACTION_PATH/../../../
+        ls -l $conanhome
         echo -e $GITHUB_ACTION_PATH/../../../cert.pem >> $conanhome/cacert.pem
         conan remote add ${{ inputs.remote_name }} ${{ inputs.artifactory_url}}
         conan user -r ${{ inputs.remote_name }} -p ${{ inputs.remote_password }} ${{ inputs.remote_user }}
