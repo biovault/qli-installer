@@ -1,0 +1,67 @@
+name: Build
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  # Job to buildwheels on all platforms
+  build_wheels:
+    name: Build wheels on ${{ matrix.job-name}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          # - name: Windows-msvc2017
+          #   os: windows-2016
+          #   compiler: msvc-2017
+          #   build-cversion: 15
+          #   build-runtime: MD
+          #   build-config: Release
+
+          - name: Linux_gcc9
+            os: ubuntu-18.04
+            build-compiler: gcc
+            build-cversion: 9
+            build-config: Release
+            build-os: Linux
+            build-libcxx: libstdc++
+
+        # - name: Macos_xcode10.3
+        #   os: macos-10.14
+        #   build-compiler: apple-clang
+        #   build-cversion: "10.0"
+        #   build-config: Release
+        #   build-os: Macos
+        #   build-xcode-version: 10.3
+        #   build-libcxx: libc++
+    steps:
+      - name: Checkout the source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Windows build
+        if: "startsWith(runner.os, 'Windows')"
+        run: |
+          echo No windows build at the moment
+
+      - name: Linux Mac build
+        if: "!startsWith(runner.os, 'Windows')"
+        run: |
+          export CONAN_USER_HOME=`pwd`/_conan
+          echo Add LKEB artifactory as remote
+          conan remote add $CONAN_LKEB_ARTIFACTORY $CONAN_UPLOAD
+          echo Add upload user
+          conan user -r $CONAN_LKEB_ARTIFACTORY -p ${{ inputs.conan-password }} ${{ inputs.conan-user }}
+          export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
+
+          conan profile new action_build
+          conan profile update settings.os=${{ inputs.conan-build-os }} action_build
+          conan profile update settings.os_build=${{ inputs.conan-build-os }} action_build
+          conan profile update settings.arch=x86_64 action_build
+          conan profile update settings.arch_build=x86_64 action_build
+          conan profile update settings.compiler=${{ inputs.conan-compiler }} action_build
+          conan profile update settings.compiler.version=${{ inputs.conan-compiler-version }} action_build
+          conan profile update settings.compiler.libcxx=${{ inputs.conan-libcxx-version}} action_build
+          conan profile show action_build
+          export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
+          conan create . HDILib/1.2.5@biovault/stable --profile action_build -s build_type=Release -o HDILib:shared=False -o HDILib:fPIC=True
