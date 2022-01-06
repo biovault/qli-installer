@@ -39,6 +39,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup python 3 version
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+
       - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
         with:
