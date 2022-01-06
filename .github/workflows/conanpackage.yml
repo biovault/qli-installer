@@ -39,7 +39,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Prepare build
+      - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
         with:
           conan_version: "1.40.4"
@@ -57,12 +57,14 @@ jobs:
           export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
 
           conan profile new action_build
-          conan profile update settings.os=${{ inputs.conan-build-os }} action_build
-          conan profile update settings.os_build=${{ inputs.conan-build-os }} action_build
+          conan profile update settings.os=${{ matrix.build-os }} action_build
+          conan profile update settings.os_build=${{ matrix.build-os }} action_build
           conan profile update settings.arch=x86_64 action_build
           conan profile update settings.arch_build=x86_64 action_build
-          conan profile update settings.compiler=${{ inputs.conan-compiler }} action_build
-          conan profile update settings.compiler.version=${{ inputs.conan-compiler-version }} action_build
-          conan profile update settings.compiler.libcxx=${{ inputs.conan-libcxx-version}} action_build
+          conan profile update settings.compiler=${{ matrix.build-compiler }} action_build
+          conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
+          conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
+
+          conan create . lkeb/stable --profile action_build
