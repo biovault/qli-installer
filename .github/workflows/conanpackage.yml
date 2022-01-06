@@ -39,6 +39,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Prepare build
+        uses: ./.github/actions/build_install
+        with:
+          conan_version: "1.40.4"
+
       - name: Windows build
         if: "startsWith(runner.os, 'Windows')"
         run: |
@@ -64,4 +69,3 @@ jobs:
           conan profile update settings.compiler.libcxx=${{ inputs.conan-libcxx-version}} action_build
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
-          conan create . HDILib/1.2.5@biovault/stable --profile action_build -s build_type=Release -o HDILib:shared=False -o HDILib:fPIC=True
