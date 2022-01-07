@@ -36,17 +36,20 @@ import argparse
 import re
 import colorama
 import atexit
-   
+from installutils import install_qt
+
+
 def reset_terminal_settings():
     colorama.deinit()
+
 
 if __name__ == "__main__":
     if platform.system() == "Windows":
         colorama.init()
-        
+
     atexit.register(reset_terminal_settings)
-        
-    semver_pattern = re.compile('5\.(\d+).(\d+)')
+
+    semver_pattern = re.compile("([56]{1})\.(\d+).(\d+)")
 
     def semver_string(string):
         m = semver_pattern.match(string)
@@ -54,37 +57,67 @@ if __name__ == "__main__":
         if not m:
             msg = "%r is not a semver string" % string
             raise argparse.ArgumentTypeError(msg)
-        return [m.group(0), m.group(1), m.group(2)]
-        
+        return [m.group(1), m.group(2), m.group(3)]
+
     baseParser = argparse.ArgumentParser(add_help=False)
-    baseParser.add_argument("qt_version", type=semver_string, help="QT version 5.X.Y")
-    baseParser.add_argument("host_system", choices = ["linux", "mac", "windows"], help="os")
-    baseParser.add_argument("-p", "--packages", 
-        nargs="*", 
-        choices = ["webengine", 
-            "webglplugin", 
-            "virtualkeyboard", 
+    baseParser.add_argument("qt_version", type=semver_string, help="QT version 5|6.X.Y")
+    baseParser.add_argument(
+        "host_system", choices=["linux", "mac", "windows"], help="os"
+    )
+    baseParser.add_argument(
+        "-p",
+        "--packages",
+        nargs="*",
+        choices=[
+            "webengine",
+            "webglplugin",
+            "virtualkeyboard",
             "script",
-            "datavis3d", 
-            "charts", 
-            "networkauth", 
+            "datavis3d",
+            "charts",
+            "networkauth",
             "purchasing",
-            "remoteobjects"], 
-        help="additional Qt packages to be installed")
+            "remoteobjects",
+        ],
+        help="additional Qt packages to be installed",
+    )
 
-    linuxParser = argparse.ArgumentParser(description="Install for Linux", parents=[baseParser])
-    linuxParser.add_argument("target", choices = ["desktop", "android"], help="target platform")
-    linuxParser.add_argument("-a", "--arch", choices = ["gcc_64"], help="supported architectures") 
+    linuxParser = argparse.ArgumentParser(
+        description="Install for Linux", parents=[baseParser]
+    )
+    linuxParser.add_argument(
+        "target", choices=["desktop", "android"], help="target platform"
+    )
+    linuxParser.add_argument(
+        "-a", "--arch", choices=["gcc_64"], help="supported architectures"
+    )
 
-    macParser = argparse.ArgumentParser(description="Install for Mac", parents=[baseParser])
-    macParser.add_argument("target", choices = ["desktop", "ios"], help="target platform")
-    macParser.add_argument("-a", "--arch", choices = ["clang_64", "ios"], help="supported architectures")
+    macParser = argparse.ArgumentParser(
+        description="Install for Mac", parents=[baseParser]
+    )
+    macParser.add_argument("target", choices=["desktop", "ios"], help="target platform")
+    macParser.add_argument(
+        "-a", "--arch", choices=["clang_64", "ios"], help="supported architectures"
+    )
 
-    windowsParser = argparse.ArgumentParser(description="Install for Windows", parents=[baseParser])
-    windowsParser.add_argument("target", choices = ["desktop", "android"], help="target platform")
-    windowsParser.add_argument("-a", "--arch", 
-        choices = ["win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64", "win32_msvc2015", "win32_mingw53"], 
-        help="supported architectures")
+    windowsParser = argparse.ArgumentParser(
+        description="Install for Windows", parents=[baseParser]
+    )
+    windowsParser.add_argument(
+        "target", choices=["desktop", "android"], help="target platform"
+    )
+    windowsParser.add_argument(
+        "-a",
+        "--arch",
+        choices=[
+            "win64_msvc2019_64",
+            "win64_msvc2017_64",
+            "win64_msvc2015_64",
+            "win32_msvc2015",
+            "win32_mingw53",
+        ],
+        help="supported architectures",
+    )
 
     args = baseParser.parse_known_args()
     print(args)
@@ -96,6 +129,5 @@ if __name__ == "__main__":
         os_args = macParser.parse_args()
     elif args[0].host_system == "linux":
         os_args = linuxParser.parse_args()
-        
-    install_qt(args[0], os_args)
-    
+
+    install_qt(vars(args[0]), vars(os_args))

@@ -48,17 +48,14 @@ class QtConan(ConanFile):
 
     _submodules = [
         "webengine",
-        "webglplugin",
         "virtualkeyboard",
-        "script",
         "datavis3d",
         "charts",
         "networkauth",
-        "purchasing",
     ]
 
     name = "qt"
-    version = "5.15.2"
+    version = "6.2.2"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"
@@ -75,13 +72,10 @@ class QtConan(ConanFile):
             "opengl": ["no", "es2", "desktop", "dynamic"],
             "openssl": [True, False],
             "webengine": [True, False],
-            "webglplugin": [True, False],
             "virtualkeyboard": [True, False],
-            "script": [True, False],
             "datavis3d": [True, False],
             "charts": [True, False],
             "networkauth": [True, False],
-            "purchasing": [True, False],
         }
     )
     no_copy_source = True
@@ -92,13 +86,10 @@ class QtConan(ConanFile):
             "opengl": "desktop",
             "openssl": True,
             "webengine": True,
-            "webglplugin": True,
             "virtualkeyboard": True,
-            "script": True,
             "datavis3d": True,
             "charts": True,
             "networkauth": True,
-            "purchasing": True,
         }
     )
 
