@@ -139,7 +139,7 @@ class QtConan(ConanFile):
             )
 
         print(arch_key)
-        common_args["qt_version"] = self.version
+        common_args["qt_version"] = self.version.split(".")
         common_args["host_system"] = os_map[str(self.settings.get_safe("os"))]
         common_args["packages"] = [
             pkg for pkg in self._submodules if self.options.get_safe(pkg)
