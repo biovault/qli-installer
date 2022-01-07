@@ -10,12 +10,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Windows-msvc2017
-            os: windows-2019
-            compiler: msvc-2017
-            build-cversion: 15
-            build-runtime: MD
-            build-config: Release
+          # - name: Windows-msvc2017
+          #   os: windows-2019
+          #   compiler: msvc-2017
+          #   build-cversion: 15
+          #   build-runtime: MD
+          #   build-config: Release
 
           - name: Linux_gcc9
             os: ubuntu-18.04
@@ -25,14 +25,14 @@ jobs:
             build-os: Linux
             build-libcxx: libstdc++
 
-          - name: Macos_xcode10.3
-            os: macos-10.15
-            build-compiler: apple-clang
-            build-cversion: "10.0"
-            build-config: Release
-            build-os: Macos
-            build-xcode-version: 10.3
-            build-libcxx: libc++
+          # - name: Macos_xcode10.3
+          #   os: macos-10.15
+          #   build-compiler: apple-clang
+          #   build-cversion: "10.0"
+          #   build-config: Release
+          #   build-os: Macos
+          #   build-xcode-version: 10.3
+          #   build-libcxx: libc++
     steps:
       - name: Checkout the source
         uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
           remote_user: ${{secrets.LKEB_ARTIFACTORY_USER}}
           remote_password: ${{secrets.LKEB_ARTIFACTORY_PASSWORD}}
 
-      - name: Package Qt for current OS using conan
+      - name: Package Qt for ${{ matrix.os }} using conan
         run: |
           export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
           echo Setting up a conan profile used to choose OS version
@@ -76,4 +76,10 @@ jobs:
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
 
           conan create . lkeb/stable --profile action_build
+        shell: bash
+
+      - name: Upload package to artifactory
+        run: |
+          export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
+          conan upload --all --force --confirm -r lkeb_artifactory $CONAN_PACKAGE_NAME/*
         shell: bash
