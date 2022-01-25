@@ -125,6 +125,7 @@ def install_qt(common_args, os_args):
             qt_version - version string in the form 5.X.Y, 6.X.Y
             host_system - one of "linux", "mac", "windows"
             packages - list of zero or more of:
+                    "webchannel",   for Qt6 with webengine
                     "webengine",
                     "virtualkeyboard",
                     "datavis3d",

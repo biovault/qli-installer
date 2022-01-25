@@ -71,7 +71,8 @@ class QtConan(ConanFile):
             "commercial": [True, False],
             "opengl": ["no", "es2", "desktop", "dynamic"],
             "openssl": [True, False],
-            "webengine": [True, False],
+            "webchannel": [True, False],
+            "webengine": [True, False],  # in Qt6 this is required for webengine
             "virtualkeyboard": [True, False],
             "datavis3d": [True, False],
             "charts": [True, False],
@@ -85,6 +86,7 @@ class QtConan(ConanFile):
             "target": "desktop",
             "opengl": "desktop",
             "openssl": True,
+            "webchannel": True,
             "webengine": True,
             "virtualkeyboard": True,
             "datavis3d": True,
