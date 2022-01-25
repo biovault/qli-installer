@@ -47,6 +47,7 @@ class qt(Generator):
 class QtConan(ConanFile):
 
     _submodules = [
+        "positioning",
         "webchannel",
         "webengine",
         "virtualkeyboard",
@@ -72,6 +73,7 @@ class QtConan(ConanFile):
             "commercial": [True, False],
             "opengl": ["no", "es2", "desktop", "dynamic"],
             "openssl": [True, False],
+            "positioning": [True, False],  # in Qt6 this is required for webengine
             "webchannel": [True, False],  # in Qt6 this is required for webengine
             "webengine": [True, False],
             "virtualkeyboard": [True, False],
@@ -87,6 +89,7 @@ class QtConan(ConanFile):
             "target": "desktop",
             "opengl": "desktop",
             "openssl": True,
+            "positioning": True,
             "webchannel": True,
             "webengine": True,
             "virtualkeyboard": True,

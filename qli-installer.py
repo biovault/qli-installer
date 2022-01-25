@@ -69,6 +69,7 @@ if __name__ == "__main__":
         "--packages",
         nargs="*",
         choices=[
+            "positioning",
             "webchannel",
             "webengine",
             "webglplugin",
