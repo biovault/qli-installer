@@ -121,6 +121,8 @@ class QtConan(ConanFile):
         # to get an architecture string for the QT install
         arch_map = dict(
             {
+                "Windows16x86": "win32_msvc2019",
+                "Windows16x86_64": "win64_msvc2019_64",
                 "Windows15x86": "win32_msvc2017",
                 "Windows15x86_64": "win64_msvc2017_64",
                 "Windows14x86": "win32_msvc2015",
