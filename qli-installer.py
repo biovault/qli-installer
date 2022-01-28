@@ -73,6 +73,7 @@ if __name__ == "__main__":
             "webchannel",
             "webengine",
             "webglplugin",
+            "imageformats",
             "virtualkeyboard",
             "script",
             "datavis3d",

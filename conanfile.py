@@ -51,6 +51,7 @@ class QtConan(ConanFile):
         "webchannel",
         "webengine",
         "virtualkeyboard",
+        "imageformats",
         "datavis3d",
         "charts",
         "networkauth",
