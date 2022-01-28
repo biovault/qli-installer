@@ -128,6 +128,7 @@ def install_qt(common_args, os_args):
                     "positioning",   for Qt6 with webengine
                     "webchannel",   for Qt6 with webengine
                     "webengine",
+                    "imageformats",  for Qt6 to get tiff support
                     "virtualkeyboard",
                     "datavis3d",
                     "charts",

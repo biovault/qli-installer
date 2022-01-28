@@ -76,6 +76,7 @@ class QtConan(ConanFile):
             "positioning": [True, False],  # in Qt6 this is required for webengine
             "webchannel": [True, False],  # in Qt6 this is required for webengine
             "webengine": [True, False],
+            "imageformats": [True, False],
             "virtualkeyboard": [True, False],
             "datavis3d": [True, False],
             "charts": [True, False],
@@ -92,6 +93,7 @@ class QtConan(ConanFile):
             "positioning": True,
             "webchannel": True,
             "webengine": True,
+            "imageformats": True,
             "virtualkeyboard": True,
             "datavis3d": True,
             "charts": True,
