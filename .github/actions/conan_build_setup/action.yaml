@@ -44,6 +44,7 @@ runs:
         else
           pip install conan==${{ inputs.conan_version }}
         fi
+        pip install "markupsafe<2.1"
       shell: bash
 
     - name: Fix path on Linux
