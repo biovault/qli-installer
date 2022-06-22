@@ -11,7 +11,7 @@ This project is a fork of Linus Jahn's original with additional options for extr
 
 Example usage:
 
-``python qli-installer.py 6.2.2 windows desktop -a win64_msvc2019_64 -p positioning webchannel webengine virtualkeyboard imageformats datavis3d charts networkauth``
+``python qli-installer.py 6.3.1 windows desktop -a win64_msvc2019_64 -p positioning webchannel webengine virtualkeyboard imageformats datavis3d charts networkauth qt5compat``
 
 Like the original it relies on 7z being installed, and a few additional non-default python packages are required: conan, colorama that can be obtained from pip.
 

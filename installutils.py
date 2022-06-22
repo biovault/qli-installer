@@ -40,6 +40,9 @@ import tempfile
 import platform
 import urllib.request
 
+# Support packages are similar to but are not addons
+support_packages = ["qt5compat", "qtshadertools", "qtquick3d", " qtquicktimeline"]
+
 
 def download(url, dest):
     response = urllib.request.urlopen(url)
@@ -65,6 +68,10 @@ def findPackage(
     if maj_version == "6":
         addon_infix = "addons."
 
+    # non-addon support packages have no infix
+    if packname in support_packages:
+        addon_infix = ""
+
     def getPossibleVersionsList(packname):
         names = []
         if packname:
@@ -75,6 +82,7 @@ def findPackage(
         else:
             names.append(f"qt.qt{maj_version}.{qt_ver_num}.{arch}")
             names.append(f"qt.{qt_ver_num}.{arch}")
+        print(f"Names for {packname}: {names}")
         return names
 
     versionsList = getPossibleVersionsList(packname)
@@ -133,7 +141,8 @@ def install_qt(common_args, os_args):
                     "datavis3d",
                     "charts",
                     "networkauth",
-                    "remoteobjects"
+                    "remoteobjects"'
+                    "qt5compat"   A Qt support package backward compatibility for Qt5 (in Qt6)
 
 
         os_args (dict of str: str)
@@ -241,11 +250,15 @@ def install_qt(common_args, os_args):
         print("*****************************************************")
         for package in package_list:
             print("package:      ", package)
+            if package in support_packages:
+                package_prefix = ""
+            else:
+                package_prefix = "qt"
             package_desc = ""
             full_version = ""
             archives = []
             archives_url = ""
-            packname = "qt" + package
+            packname = package_prefix + package
 
             package_desc, full_version, archives, archives_url = findPackage(
                 maj_version, qt_ver_num, arch, packages_url, update_xml, packname

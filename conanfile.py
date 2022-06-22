@@ -58,7 +58,7 @@ class QtConan(ConanFile):
     ]
 
     name = "qt"
-    version = "6.2.2"
+    version = "6.3.1"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"
@@ -82,6 +82,7 @@ class QtConan(ConanFile):
             "datavis3d": [True, False],
             "charts": [True, False],
             "networkauth": [True, False],
+            "qt5compat": [True, False],
         }
     )
     no_copy_source = True
@@ -99,6 +100,7 @@ class QtConan(ConanFile):
             "datavis3d": True,
             "charts": True,
             "networkauth": True,
+            "qt5compat": True,
         }
     )
 

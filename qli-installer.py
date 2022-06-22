@@ -81,6 +81,7 @@ if __name__ == "__main__":
             "networkauth",
             "purchasing",
             "remoteobjects",
+            "qt5compat",
         ],
         help="additional Qt packages to be installed",
     )
