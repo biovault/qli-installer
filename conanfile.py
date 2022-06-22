@@ -55,6 +55,7 @@ class QtConan(ConanFile):
         "datavis3d",
         "charts",
         "networkauth",
+        "qt5compat",
     ]
 
     name = "qt"
