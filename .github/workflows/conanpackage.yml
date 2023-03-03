@@ -63,7 +63,7 @@ jobs:
       - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
         with:
-          conan_version: "1.43.4"
+          conan_version: "1.53.0"
           remote_user: ${{secrets.LKEB_ARTIFACTORY_USER}}
           remote_password: ${{secrets.LKEB_ARTIFACTORY_PASSWORD}}
 
@@ -91,7 +91,7 @@ jobs:
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
 
-          conan create . lkeb/stable --profile action_build
+          conan create . lkeb/stable -pr:h action_build -pr:b action_build
         shell: bash
 
       - name: Upload package to artifactory
