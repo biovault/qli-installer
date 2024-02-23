@@ -69,7 +69,7 @@ jobs:
           - name: Macos_xcode12.4
             os: macos-12
             build-compiler: apple-clang
-            build-cversion: "13.1"
+            build-cversion: 13
             build-config: Release
             build-os: Macos
             build-xcode-version: 13.4
