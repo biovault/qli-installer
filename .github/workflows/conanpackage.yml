@@ -10,12 +10,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # - name: Windows-msvc2017
-          #   os: windows-2019
-          #   compiler: msvc-2017
-          #   build-cversion: 15
-          #   build-runtime: MD
-          #   build-config: Release
 
           - name: Windows-msvc2019
             os: windows-2019
@@ -47,15 +41,6 @@ jobs:
             build-config: Release
             build-os: Linux
             build-libcxx: libstdc++
-
-          #- name: Macos_xcode12.4
-          #  os: macos-12
-          #  build-compiler: apple-clang
-          #  build-cversion: 13
-          #  build-config: Release
-          # build-os: Macos
-          # build-xcode-version: 13.4
-          #  build-libcxx: libc++
 
           - name: Macos_xcode13.4
             os: macos-12
@@ -89,7 +74,7 @@ jobs:
       - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
         with:
-          conan_version: "1.53.0"
+          conan_version: "1.64.0"
           remote_user: ${{secrets.LKEB_ARTIFACTORY_USER}}
           remote_password: ${{secrets.LKEB_ARTIFACTORY_PASSWORD}}
 
