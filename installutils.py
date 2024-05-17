@@ -142,7 +142,7 @@ def install_qt(common_args, os_args):
                     "charts",
                     "networkauth",
                     "remoteobjects"'
-                    "qt5compat"   A Qt support package backward compatibility for Qt5 (in Qt6)
+                    "qt5compat" "multimedia"   A Qt support package backward compatibility for Qt5 (in Qt6)
 
 
         os_args (dict of str: str)
