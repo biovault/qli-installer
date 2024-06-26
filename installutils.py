@@ -141,8 +141,9 @@ def install_qt(common_args, os_args):
                     "datavis3d",
                     "charts",
                     "networkauth",
-                    "remoteobjects"'
-                    "qt5compat"   A Qt support package backward compatibility for Qt5 (in Qt6)
+                    "remoteobjects"
+                    "qt5compat",   A Qt support package backward compatibility for Qt5 (in Qt6)
+                    "multimedia"
 
 
         os_args (dict of str: str)

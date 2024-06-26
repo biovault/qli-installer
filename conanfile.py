@@ -56,6 +56,7 @@ class QtConan(ConanFile):
         "charts",
         "networkauth",
         "qt5compat",
+        "multimedia"
     ]
 
     name = "qt"
@@ -84,6 +85,7 @@ class QtConan(ConanFile):
             "charts": [True, False],
             "networkauth": [True, False],
             "qt5compat": [True, False],
+            "multimedia": [True, False],
         }
     )
     no_copy_source = True
@@ -102,6 +104,7 @@ class QtConan(ConanFile):
             "charts": False,  # Disabled GPL
             "networkauth": False,  # Disabled GPL
             "qt5compat": True,
+            "multimedia": True,
         }
     )
 
