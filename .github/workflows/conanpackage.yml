@@ -131,14 +131,14 @@ jobs:
           fi
 
       - name: Macos arch
-        if: matrix.build-os == "Macos"
+        if: startsWith(matrix.build-os, 'Macos') == true
         run: |
             conan profile update settings.arch=armv8 action_build
             conan profile update settings.arch_build=armv8 action_build
         shell: bash
 
       - name: Not Macos arch
-        if: matrix.build-os != "Macos"
+        if: startsWith(matrix.build-os, 'Macos') == false
         run: |
               conan profile update settings.arch=x86_64 action_build
               conan profile update settings.arch_build=x86_64 action_build
