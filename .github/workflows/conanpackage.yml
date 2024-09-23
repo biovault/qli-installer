@@ -129,23 +129,27 @@ jobs:
             conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
             conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
           fi
-          export minfo="i386"
-          if [[ ${{ matrix.build-os }} == "Macos" ]]; then
-              export minfo=`arch`
-          fi 
-          if [[ $minfo == "i386" ]]; then 
+
+      - name: Macos arch
+        if: matrix.build-os == "Macos"
+          run: |
+            conan profile update settings.arch=armv8 action_build
+            conan profile update settings.arch_build=armv8 action_build
+          shell: bash
+
+      - name: Not Macos arch
+        if: matrix.build-os != "Macos"
+          run: |
               conan profile update settings.arch=x86_64 action_build
               conan profile update settings.arch_build=x86_64 action_build
-          else
-              conan profile update settings.arch=armv8 action_build
-              conan profile update settings.arch_build=armv8 action_build
-          fi
+          shell: bash
+
+      - name: Create package
+        run: |
           conan profile update settings.build_type=${{ matrix.build-config }} action_build
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
-
           conan create . lkeb/stable -pr:h action_build -pr:b action_build
-        shell: bash
 
       - name: Upload package to artifactory
         run: |
