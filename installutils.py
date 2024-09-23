@@ -198,7 +198,7 @@ def install_qt(common_args, os_args):
                 arch = "win32_msvc2019_64"
             # as far as 6.72 no msvc 2022 in qt download
             # from 6.8 only msvc 2022
-            if version[0] == "6" and int(version[1]) < 8
+            if version[0] == "6" and int(version[1]) < 8:
                 if arch == "win32_msvc2022_64": 
                     arch = "win32_msvc2019_64"
     elif os_name == "linux" and target == "desktop":
