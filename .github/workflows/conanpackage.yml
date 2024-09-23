@@ -150,6 +150,7 @@ jobs:
           conan profile show action_build
           export CONAN_SKIP_BROKEN_SYMLINKS_CHECK=1
           conan create . lkeb/stable -pr:h action_build -pr:b action_build
+        shell: bash
 
       - name: Upload package to artifactory
         run: |
