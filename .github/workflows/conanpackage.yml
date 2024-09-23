@@ -130,7 +130,7 @@ jobs:
             conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
           fi
           export minfo="i386"
-          if [[ ${{ inputs.conan-build-os }} == "Macos" ]]; then
+          if [[ ${{ matrix.build-os }} == "Macos" ]]; then
               export minfo=`arch`
           fi 
           if [[ $minfo == "i386" ]]; then 
