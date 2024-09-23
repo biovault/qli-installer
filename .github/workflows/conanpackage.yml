@@ -111,7 +111,6 @@ jobs:
 
       - name: Package Qt for ${{ matrix.os }} using conan
         run: |
-          export CONAN_PACKAGE_NAME=`conan inspect --raw name conanfile.py`
           echo Setting up a conan profile used to choose OS version
           conan profile new action_build
           conan profile update settings.arch=x86_64 action_build
