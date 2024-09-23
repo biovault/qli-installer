@@ -115,6 +115,7 @@ if __name__ == "__main__":
         "-a",
         "--arch",
         choices=[
+            "win64_msvc2022_64",
             "win64_msvc2019_64",
             "win64_msvc2017_64",
             "win64_msvc2015_64",

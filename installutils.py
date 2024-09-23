@@ -59,6 +59,7 @@ def findPackage(
     update_xml=None,
     packname=None,
 ):
+    print(f"find_package: {maj_version}, {qt_ver_num}, {arch}, {packages_url}, {packname}")
     package_desc = ""
     full_version = ""
     archives = []
@@ -199,8 +200,10 @@ def install_qt(common_args, os_args):
             # as far as 6.72 no msvc 2022 in qt download
             # from 6.8 only msvc 2022
             if version[0] == "6" and int(version[1]) < 8:
-                if arch == "win32_msvc2022_64": 
-                    arch = "win32_msvc2019_64"
+                print(f"Revert to msvc 2019 for arch : {arch} at version: {version}")
+                if arch == "win64_msvc2022_64": 
+                    arch = "win64_msvc2019_64"
+
     elif os_name == "linux" and target == "desktop":
         arch = "gcc_64"
     elif os_name == "mac" and target == "desktop":
@@ -208,6 +211,7 @@ def install_qt(common_args, os_args):
     elif os_name == "mac" and target == "ios":
         arch = "ios"
 
+    print(f"Derived arch: {arch}")
     if arch == "":
         print("Please supply a target architecture.")
         exit(1)
