@@ -152,7 +152,7 @@ def install_qt(common_args, os_args):
                 mac/desktop: "clang_64"
                 mac/ios: "ios"
                 windows/desktop: one of
-                    "win64_msvc2019_64, win64_msvc2017_64, "win64_msvc2015_64",
+                    "win64_msvc2022_64", "win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64",
                     "win32_msvc2015", "win32_mingw53"
                 */android: "android_x86", "android_armv7"
 
@@ -196,6 +196,11 @@ def install_qt(common_args, os_args):
                 arch = "win64_msvc2019_64"
             if arch == "win32_msvc2017_64":
                 arch = "win32_msvc2019_64"
+            # as far as 6.72 no msvc 2022 in qt download
+            # from 6.8 only msvc 2022
+            if version[0] == "6" and int(version[1]) < 8
+                if arch == "win32_msvc2022_64": 
+                    arch = "win32_msvc2019_64"
     elif os_name == "linux" and target == "desktop":
         arch = "gcc_64"
     elif os_name == "mac" and target == "desktop":
