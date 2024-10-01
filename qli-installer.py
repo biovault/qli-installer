@@ -83,6 +83,7 @@ if __name__ == "__main__":
             "remoteobjects",
             "qt5compat",
             "multimedia",
+            "serialport",
         ],
         help="additional Qt packages to be installed",
     )
