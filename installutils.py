@@ -153,7 +153,7 @@ def install_qt(common_args, os_args):
         os_args (dict of str: str)
             target - one of: "desktop", "android", "ios"
             arch - depending on common_args.host_system/os_args.target
-                linux: "gcc_64"
+                linux: "gcc_64", "linux_gcc_64"
                 mac/desktop: "clang_64"
                 mac/ios: "ios"
                 windows/desktop: one of
@@ -194,7 +194,7 @@ def install_qt(common_args, os_args):
         print("Qt 6.7 or greater")
         if os_name == "linux":
             gcc_arch = "linux_gcc_64"
-            print(f"Prefix linux to arch {gcc_arch}")
+
     if os_args["arch"]:
         arch = os_args["arch"]
         # See https://bugreports.qt.io/browse/QTBUG-84559 for msvc2017 use msvc2019

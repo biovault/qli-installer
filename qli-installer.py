@@ -95,7 +95,10 @@ if __name__ == "__main__":
         "target", choices=["desktop", "android"], help="target platform"
     )
     linuxParser.add_argument(
-        "-a", "--arch", choices=["gcc_64"], help="supported architectures"
+        "-a",
+        "--arch",
+        choices=["gcc_64", "linux_gcc_64"],
+        help="supported architectures",
     )
 
     macParser = argparse.ArgumentParser(

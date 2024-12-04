@@ -140,7 +140,7 @@ class QtConan(ConanFile):
                 "Windows15x86_64": "win64_msvc2017_64",
                 "Windows14x86": "win32_msvc2015",
                 "Windows14x86_64": "win64_msvc2015_64",
-                "Linux": "gcc_64",
+                "Linux": "linux_gcc_64",
                 "Macos": "clang_64",
             }
         )
