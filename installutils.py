@@ -190,8 +190,11 @@ def install_qt(common_args, os_args):
     arch = ""
     gcc_arch = "gcc_64"
     # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
-    if (version[0] == "6" and int(version[1]) >= 7) and (os_name == "linux"):
-        gcc_arch = "linux_gcc_64"
+    if version[0] == "6" and int(version[1]) >= 7:
+        print("Qt 6.7 or greater")
+        if os_name == "linux":
+            gcc_arch = "linux_gcc_64"
+            print(f"Prefix linux to arch {gcc_arch}")
     if os_args["arch"]:
         arch = os_args["arch"]
         # See https://bugreports.qt.io/browse/QTBUG-84559 for msvc2017 use msvc2019
