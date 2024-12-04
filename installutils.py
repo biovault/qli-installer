@@ -59,7 +59,9 @@ def findPackage(
     update_xml=None,
     packname=None,
 ):
-    print(f"find_package: {maj_version}, {qt_ver_num}, {arch}, {packages_url}, {packname}")
+    print(
+        f"findPackage: {maj_version}, {qt_ver_num}, {arch}, {packages_url}, {packname}"
+    )
     package_desc = ""
     full_version = ""
     archives = []
@@ -103,7 +105,8 @@ def findPackage(
             break
     if not full_version or not archives:
         print(
-            f"Error while parsing package information for {qt_ver_num} {arch} {packages_url} {update_xml} {packname}!"
+            "Error while parsing package information for"
+            f" {qt_ver_num} {arch} {packages_url} {update_xml} {packname}!"
         )
         exit(1)
     return package_desc, full_version, archives, archives_url
@@ -185,6 +188,10 @@ def install_qt(common_args, os_args):
     #                  "win32_msvc2015", "win32_mingw53"
     # */android:       "android_x86", "android_armv7"
     arch = ""
+    gcc_arch = "gcc_64"
+    # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
+    if version[0] == "6" and int(version[1]) >= 7 and os_name == "linux" :
+        gcc_arch = "linux_gcc_64"
     if os_args["arch"]:
         arch = os_args["arch"]
         # See https://bugreports.qt.io/browse/QTBUG-84559 for msvc2017 use msvc2019
@@ -202,11 +209,11 @@ def install_qt(common_args, os_args):
             # from 6.8 only msvc 2022
             if version[0] == "6" and int(version[1]) < 8:
                 print(f"Revert to msvc 2019 for arch : {arch} at version: {version}")
-                if arch == "win64_msvc2022_64": 
+                if arch == "win64_msvc2022_64":
                     arch = "win64_msvc2019_64"
 
-    elif os_name == "linux" and target == "desktop":
-        arch = "gcc_64"
+    elif os_name == "linux" and target == "desktop"
+        arch = gcc_arch
     elif os_name == "mac" and target == "desktop":
         arch = "clang_64"
     elif os_name == "mac" and target == "ios":
