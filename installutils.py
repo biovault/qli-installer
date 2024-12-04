@@ -190,7 +190,7 @@ def install_qt(common_args, os_args):
     arch = ""
     gcc_arch = "gcc_64"
     # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
-    if version[0] == "6" and int(version[1]) >= 7 and os_name == "linux":
+    if (version[0] == "6" and int(version[1]) >= 7) and (os_name == "linux"):
         gcc_arch = "linux_gcc_64"
     if os_args["arch"]:
         arch = os_args["arch"]
@@ -205,7 +205,7 @@ def install_qt(common_args, os_args):
                 arch = "win64_msvc2019_64"
             if arch == "win32_msvc2017_64":
                 arch = "win32_msvc2019_64"
-            # as far as 6.72 no msvc 2022 in qt download
+            # as far as 6.7.2 no msvc 2022 in qt download
             # from 6.8 only msvc 2022
             if version[0] == "6" and int(version[1]) < 8:
                 print(f"Revert to msvc 2019 for arch : {arch} at version: {version}")
