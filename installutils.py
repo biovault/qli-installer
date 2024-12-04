@@ -190,7 +190,7 @@ def install_qt(common_args, os_args):
     arch = ""
     gcc_arch = "gcc_64"
     # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
-    if version[0] == "6" and int(version[1]) >= 7 and os_name == "linux" :
+    if version[0] == "6" and int(version[1]) >= 7 and os_name == "linux":
         gcc_arch = "linux_gcc_64"
     if os_args["arch"]:
         arch = os_args["arch"]
@@ -212,7 +212,7 @@ def install_qt(common_args, os_args):
                 if arch == "win64_msvc2022_64":
                     arch = "win64_msvc2019_64"
 
-    elif os_name == "linux" and target == "desktop"
+    elif os_name == "linux" and target == "desktop":
         arch = gcc_arch
     elif os_name == "mac" and target == "desktop":
         arch = "clang_64"
