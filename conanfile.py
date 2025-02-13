@@ -85,6 +85,7 @@ class QtConan(ConanFile):
             "datavis3d": [True, False],
             "charts": [True, False],
             "networkauth": [True, False],
+            "qtwaylandcompositor": [True, False],
             "qt5compat": [True, False],
             "multimedia": [True, False],
             "serialport": [True, False],
@@ -105,6 +106,7 @@ class QtConan(ConanFile):
             "datavis3d": False,  # Disabled GPL
             "charts": False,  # Disabled GPL
             "networkauth": False,  # Disabled GPL
+            "qtwaylandcompositor" : False,  # Disabled GPL
             "qt5compat": True,
             "multimedia": True,
             "serialport": True,

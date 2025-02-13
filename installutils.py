@@ -41,7 +41,7 @@ import platform
 import urllib.request
 
 # Support packages are similar to but are not addons
-support_packages = ["qt5compat", "qtshadertools", "qtquick3d", " qtquicktimeline"]
+support_packages = ["qt5compat", "qtshadertools", "qtquick3d", "qtquicktimeline", "qtwaylandcompositor"]
 
 
 def download(url, dest):
