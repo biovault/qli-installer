@@ -10,13 +10,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # - name: Windows-msvc2017
-          #   os: windows-2019
-          #   compiler: msvc-2017
-          #   build-cversion: 15
-          #   build-runtime: MD
-          #   build-config: Release
-
           - name: Windows-msvc2019
             os: windows-2019
             compiler: msvc-2019
@@ -31,24 +24,6 @@ jobs:
             build-cversion: 17
             build-runtime: MD
             build-config: Release
-            build-arch: x86_64
-
-          #- name: Linux_gcc9
-          #  os: ubuntu-22.04
-          #  build-compiler: gcc
-          #  build-cversion: 9
-          #  build-config: Release
-          #  build-os: Linux
-          #  build-libcxx: libstdc++11
-          #  build-arch: x86_64
-
-          - name: Linux_gcc10
-            os: ubuntu-22.04
-            build-compiler: gcc
-            build-cversion: 10
-            build-config: Release
-            build-os: Linux
-            build-libcxx: libstdc++11
             build-arch: x86_64
 
           - name: Linux_gcc11
@@ -68,25 +43,6 @@ jobs:
             build-os: Linux
             build-libcxx: libstdc++11
             build-arch: x86_64
-
-          #- name: Macos_xcode12.4
-          #  os: macos-12
-          #  build-compiler: apple-clang
-          #  build-cversion: 13
-          #  build-config: Release
-          # build-os: Macos
-          # build-xcode-version: 13.4
-          #  build-libcxx: libc++
-
-          #- name: Macos_xcode13.4
-          #  os: macos-12
-          #  build-compiler: apple-clang
-          #  build-cversion: 13
-          #  build-config: Release
-          #  build-os: Macos
-          #  build-xcode-version: 13.4
-          #  build-libcxx: libc++
-          #  build-arch: x86_64
 
           - name: Macos_xcode14.3
             os: macos-13
