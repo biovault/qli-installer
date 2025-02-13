@@ -167,7 +167,8 @@ class QtConan(ConanFile):
         common_args["packages"] = [
             pkg for pkg in self._submodules if self.options.get_safe(pkg)
         ]
-        print("Packages to installed: ", common_args["packages"])
+        print("Packages to install: ", common_args["packages"])
+
         os_args["target"] = self.options.target
         os_args["arch"] = arch_map[arch_key]
 
