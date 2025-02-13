@@ -61,7 +61,7 @@ class QtConan(ConanFile):
     ]
 
     name = "qt"
-    version = "6.7.3"
+    version = "6.8.2"
     description = "Qt is a cross-platform framework for graphical user interfaces."
     topics = ("conan", "qt", "ui")
     url = "https://github.com/bldrvnlw/qli-installer"

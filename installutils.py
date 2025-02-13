@@ -42,6 +42,7 @@ import urllib.request
 
 # Support packages are similar to but are not addons
 support_packages = ["qt5compat", "qtshadertools", "qtquick3d", "qtquicktimeline", "qtwaylandcompositor"]
+support_packages68 = ["qtwaylandcompositor"]
 
 
 def download(url, dest):
@@ -52,63 +53,77 @@ def download(url, dest):
 
 
 def findPackage(
-    maj_version="",
     qt_ver_num="",
     arch="",
     packages_url="",
     update_xml=None,
     packname=None,
+    is_extension=False
 ):
     print(
-        f"findPackage: {maj_version}, {qt_ver_num}, {arch}, {packages_url}, {packname}"
+        f"findPackage: {qt_ver_num}, {arch}, {packages_url}, {packname}"
     )
     package_desc = ""
     full_version = ""
     archives = []
     archives_url = ""
 
+    version_major = qt_ver_num[0]
+    version_minor = qt_ver_num[1]
+
     addon_infix = ""
-    if maj_version == "6":
+    if version_major == "6":
         addon_infix = "addons."
 
     # non-addon support packages have no infix
-    if packname in support_packages:
+    no_suffix_packages = support_packages
+    if version_major == "6" and int(version_minor) >= 8:
+        no_suffix_packages = support_packages68
+
+    if packname in no_suffix_packages:
         addon_infix = ""
 
-    def getPossibleVersionsList(packname):
-        names = []
-        if packname:
-            names.append(
-                f"qt.qt{maj_version}.{qt_ver_num}.{addon_infix}{packname}.{arch}"
-            )
-            names.append(f"qt.{qt_ver_num}.{addon_infix}{packname}.{arch}")
-        else:
-            names.append(f"qt.qt{maj_version}.{qt_ver_num}.{arch}")
-            names.append(f"qt.{qt_ver_num}.{arch}")
-        print(f"Names for {packname}: {names}")
-        return names
+    versionsList = []
+    if packname:
+        versionsList.append(
+            f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.{arch}"
+        )
+        versionsList.append(f"qt.{qt_ver_num}.{addon_infix}{packname}.{arch}")
+    else:
+        versionsList.append(f"qt.qt{version_major}.{qt_ver_num}.{arch}")
+        versionsList.append(f"qt.{qt_ver_num}.{arch}")
 
-    versionsList = getPossibleVersionsList(packname)
+    if is_extension:
+        versionsList = [ f"extensions.{packname}.{qt_ver_num}.{arch}" ]
+    
+    print(f"Names for {packname}: {versionsList}")
+
     for packageupdate in update_xml.findall("./PackageUpdate"):
         name = packageupdate.find("Name").text
-        # print("name qt5ver arch", name, qt_ver_num, arch)
+        print(f"name: {name}")
         if name in versionsList:
             full_version = packageupdate.find("Version").text
             archives = packageupdate.find("DownloadableArchives").text.split(", ")
             # print("version archives", full_version, archives)
             package_desc = packageupdate.find("Description").text
-            if f".qt{maj_version}." in name:
+
+            if is_extension:
+                archives_url = packages_url + name
+            elif f".qt{version_major}." in name:
                 archives_url = packages_url + versionsList[0]
             else:
                 archives_url = packages_url + versionsList[1]
+
             archives_url += "/"
             break
+
     if not full_version or not archives:
         print(
             "Error while parsing package information for"
             f" {qt_ver_num} {arch} {packages_url} {update_xml} {packname}!"
         )
         exit(1)
+        
     return package_desc, full_version, archives, archives_url
 
 
@@ -165,6 +180,7 @@ def install_qt(common_args, os_args):
     binary compatible. So we replace 2017 by 2019 for a 2017 package
     """
     package_list = common_args["packages"]
+    extension_list = []
     base_url = "https://download.qt.io/online/qtsdkrepository/"
 
     # Qt version
@@ -177,7 +193,10 @@ def install_qt(common_args, os_args):
     # one of: "desktop", "android", "ios"
     target = str(os_args["target"])
     print("Target", target)
-    maj_version = version[0]
+
+    version_major = version[0]
+    version_minor = version[1]
+
     # Target architectures:
     #
     # linux/desktop:   "gcc_64"
@@ -190,7 +209,7 @@ def install_qt(common_args, os_args):
     arch = ""
     gcc_arch = "gcc_64"
     # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
-    if version[0] == "6" and int(version[1]) >= 7:
+    if version_major == "6" and int(version_minor) >= 7:
         print("Qt 6.7 or greater")
         if os_name == "linux":
             gcc_arch = "linux_gcc_64"
@@ -201,8 +220,8 @@ def install_qt(common_args, os_args):
         # for version 5.15 (and higher?)
         if (
             os_name == "windows"
-            and (version[0] == "5" and version[1] == "15")
-            or (version[0] == "6")
+            and (version_major == "5" and version_minor == "15")
+            or (version_major == "6")
         ):
             if arch == "win64_msvc2017_64":
                 arch = "win64_msvc2019_64"
@@ -210,7 +229,7 @@ def install_qt(common_args, os_args):
                 arch = "win32_msvc2019_64"
             # as far as 6.7.2 no msvc 2022 in qt download
             # from 6.8 only msvc 2022
-            if version[0] == "6" and int(version[1]) < 8:
+            if version_major == "6" and int(version_minor) < 8:
                 print(f"Revert to msvc 2019 for arch : {arch} at version: {version}")
                 if arch == "win64_msvc2022_64":
                     arch = "win64_msvc2019_64"
@@ -234,8 +253,23 @@ def install_qt(common_args, os_args):
         packages_url += os_name + "_x86/"
     else:
         packages_url += os_name + "_x64/"
+
+    extensions_url = packages_url + "extensions"  + "/"
+
     packages_url += target + "/"
-    packages_url += f"qt{maj_version}_{qt_ver_num}" + "/"
+    packages_url += f"qt{version_major}_{qt_ver_num}" + "/"
+
+    # For qt 6.8 and up the xml is in a further nested folder
+    # and qt webengine has to be handled differently
+    if version_major == "6" and int(version_minor) >= 8:
+        packages_url += f"qt{version_major}_{qt_ver_num}" + "/"
+        qt_extensions = ["webengine", "pdf"]
+
+        print(f"package_list (prefilter): {package_list}")
+        extension_list = [package for package in package_list if package in qt_extensions]
+        print(f"extension_list: {extension_list}")
+        package_list   = [package for package in package_list if package not in qt_extensions]
+        print(f"package_list: {package_list}")
 
     print("Packages url", f"{packages_url}Updates.xml")
 
@@ -248,7 +282,7 @@ def install_qt(common_args, os_args):
     update_xml = ElementTree.fromstring(update_content)
 
     package_desc, full_version, archives, archives_url = findPackage(
-        maj_version, qt_ver_num, arch, packages_url, update_xml
+        qt_ver_num, arch, packages_url, update_xml
     )
 
     print("*****************************************************")
@@ -270,21 +304,56 @@ def install_qt(common_args, os_args):
         print("*****************************************************")
         for package in package_list:
             print("package:      ", package)
-            if package in support_packages:
-                package_prefix = ""
-            else:
-                package_prefix = "qt"
             package_desc = ""
             full_version = ""
             archives = []
             archives_url = ""
-            packname = package_prefix + package
+            package_name = "qt" + package if not package.startswith("qt") else package
 
             package_desc, full_version, archives, archives_url = findPackage(
-                maj_version, qt_ver_num, arch, packages_url, update_xml, packname
+                qt_ver_num, arch, packages_url, update_xml, package_name
             )
             install_archives(archives, archives_url, full_version)
         print("*****************************************************")
+
+    # qt webengine is not listed like the other plugins for > 6.8 (also qt pdf)
+    # but instead in https://download.qt.io/online/qtsdkrepository/linux_x64/extensions
+    if extension_list:
+        print("*****************************************************")
+        print("Installing extra extensions {}".format(package_desc))
+        print("*****************************************************")
+        for package in extension_list:
+            print("extension:      ", package)
+            package_desc = ""
+            full_version = ""
+            archives = []
+            archives_url = ""
+            extension_name = "qt" + package if not package.startswith("qt") else package
+
+            extension_sub = ""
+            if os_name == "windows":
+                extension_sub = "msvc2022_64"
+            elif os_name == "linux":
+                extension_sub = "x86_64"
+            elif os_name == "mac":
+                extension_sub = "clang_64"
+
+            extension_url = extensions_url + extension_name + "/" + qt_ver_num + "/" + extension_sub + "/"
+
+            extension_updates_xml = f"{extension_url}Updates.xml"
+            print(f"extension_updates_xml: {extension_updates_xml}")
+            download(f"{extension_url}Updates.xml", tempupdatesfile)
+            print("Updates.xml downloaded to {0}".format(tempupdatesfile))
+            with open(tempupdatesfile, "r") as file:
+                update_content = file.read()
+            update_xml = ElementTree.fromstring(update_content)
+
+            package_desc, full_version, archives, archives_url = findPackage(
+                qt_ver_num, arch, extension_url, update_xml, extension_name, True
+            )
+            install_archives(archives, archives_url, full_version)
+        print("*****************************************************")
+
 
     sys.stdout.write("\033[K")
     print("Finished installation")
