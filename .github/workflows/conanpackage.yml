@@ -69,7 +69,7 @@ jobs:
       - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
         with:
-          conan_version: "1.64.0"
+          conan_version: "1.66.0"
           remote_user: ${{secrets.LKEB_ARTIFACTORY_USER}}
           remote_password: ${{secrets.LKEB_ARTIFACTORY_PASSWORD}}
 
