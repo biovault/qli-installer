@@ -39,9 +39,16 @@ from conans import tools
 import tempfile
 import platform
 import urllib.request
+import subprocess
 
 # Support packages are similar to but are not addons
-support_packages = ["qt5compat", "qtshadertools", "qtquick3d", "qtquicktimeline", "qtwaylandcompositor"]
+support_packages = [
+    "qt5compat",
+    "qtshadertools",
+    "qtquick3d",
+    "qtquicktimeline",
+    "qtwaylandcompositor",
+]
 support_packages68 = ["qtwaylandcompositor"]
 
 
@@ -58,11 +65,9 @@ def findPackage(
     packages_url="",
     update_xml=None,
     packname=None,
-    is_extension=False
+    is_extension=False,
 ):
-    print(
-        f"findPackage: {qt_ver_num}, {arch}, {packages_url}, {packname}"
-    )
+    print(f"findPackage: {qt_ver_num}, {arch}, {packages_url}, {packname}")
     package_desc = ""
     full_version = ""
     archives = []
@@ -94,8 +99,8 @@ def findPackage(
         versionsList.append(f"qt.{qt_ver_num}.{arch}")
 
     if is_extension:
-        versionsList = [ f"extensions.{packname}.{qt_ver_num}.{arch}" ]
-    
+        versionsList = [f"extensions.{packname}.{qt_ver_num}.{arch}"]
+
     print(f"Names for {packname}: {versionsList}")
 
     for packageupdate in update_xml.findall("./PackageUpdate"):
@@ -123,11 +128,11 @@ def findPackage(
             f" {qt_ver_num} {arch} {packages_url} {update_xml} {packname}!"
         )
         exit(1)
-        
+
     return package_desc, full_version, archives, archives_url
 
 
-def install_archives(archives, archives_url, full_version):
+def install_archives(archives, archives_url, full_version, make_thin):
     for archive in archives:
         url = f"{archives_url}{full_version}{archive}"
 
@@ -138,9 +143,16 @@ def install_archives(archives, archives_url, full_version):
         sys.stdout.write("\033[K")
         print(f"Extracting {archive}...")  # , end="\r")
         if platform.system() == "Windows":
-            os.system("7z x package.7z >NUL")
+            os.system("7z x package.7z -opackage >NUL")
         else:
-            os.system("7z x package.7z 1>/dev/null")
+            os.system("7z x package.7z -opackage 1>/dev/null")
+            if make_thin != "no":
+                print(f"Extracting arch {make_thin} from package")
+                subprocess.run(
+                    [f"./macos_folder2thin.sh package {make_thin}"],
+                    shell=True,
+                    check=True,
+                )
         os.remove("package.7z")
 
 
@@ -165,6 +177,7 @@ def install_qt(common_args, os_args):
                     "multimedia",
                     "serialport"  For RS232 but apparently a dependency for another package
 
+
         os_args (dict of str: str)
             target - one of: "desktop", "android", "ios"
             arch - depending on common_args.host_system/os_args.target
@@ -175,6 +188,8 @@ def install_qt(common_args, os_args):
                     "win64_msvc2022_64", "win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64",
                     "win32_msvc2015", "win32_mingw53"
                 */android: "android_x86", "android_armv7"
+            thin = None or "arm64" or "x86_64"  - only relevant on Macos will trigger
+                a script that used lipo to extract
 
     Changes for Qt5.15 (and greater): no 2017 packages are available but 2019 is
     binary compatible. So we replace 2017 by 2019 for a 2017 package
@@ -185,6 +200,7 @@ def install_qt(common_args, os_args):
 
     # Qt version
     version = common_args["qt_version"]
+    make_thin = os_args["thin"]
     print("version", version)
     qt_ver_num = f"{version[0]}{version[1]}{version[2]}"
     # one of: "linux", "mac", "windows"
@@ -254,7 +270,7 @@ def install_qt(common_args, os_args):
     else:
         packages_url += os_name + "_x64/"
 
-    extensions_url = packages_url + "extensions"  + "/"
+    extensions_url = packages_url + "extensions" + "/"
 
     packages_url += target + "/"
     packages_url += f"qt{version_major}_{qt_ver_num}" + "/"
@@ -266,9 +282,13 @@ def install_qt(common_args, os_args):
         qt_extensions = ["webengine", "pdf"]
 
         print(f"package_list (prefilter): {package_list}")
-        extension_list = [package for package in package_list if package in qt_extensions]
+        extension_list = [
+            package for package in package_list if package in qt_extensions
+        ]
         print(f"extension_list: {extension_list}")
-        package_list   = [package for package in package_list if package not in qt_extensions]
+        package_list = [
+            package for package in package_list if package not in qt_extensions
+        ]
         print(f"package_list: {package_list}")
 
     print("Packages url", f"{packages_url}Updates.xml")
@@ -296,7 +316,7 @@ def install_qt(common_args, os_args):
         print("Packages:  ", package_list)
     print("*****************************************************")
 
-    install_archives(archives, archives_url, full_version)
+    install_archives(archives, archives_url, full_version, make_thin)
 
     if package_list:
         print("*****************************************************")
@@ -313,7 +333,7 @@ def install_qt(common_args, os_args):
             package_desc, full_version, archives, archives_url = findPackage(
                 qt_ver_num, arch, packages_url, update_xml, package_name
             )
-            install_archives(archives, archives_url, full_version)
+            install_archives(archives, archives_url, full_version, make_thin)
         print("*****************************************************")
 
     # qt webengine is not listed like the other plugins for > 6.8 (also qt pdf)
@@ -338,7 +358,15 @@ def install_qt(common_args, os_args):
             elif os_name == "mac":
                 extension_sub = "clang_64"
 
-            extension_url = extensions_url + extension_name + "/" + qt_ver_num + "/" + extension_sub + "/"
+            extension_url = (
+                extensions_url
+                + extension_name
+                + "/"
+                + qt_ver_num
+                + "/"
+                + extension_sub
+                + "/"
+            )
 
             extension_updates_xml = f"{extension_url}Updates.xml"
             print(f"extension_updates_xml: {extension_updates_xml}")
@@ -351,9 +379,8 @@ def install_qt(common_args, os_args):
             package_desc, full_version, archives, archives_url = findPackage(
                 qt_ver_num, arch, extension_url, update_xml, extension_name, True
             )
-            install_archives(archives, archives_url, full_version)
+            install_archives(archives, archives_url, full_version, make_thin)
         print("*****************************************************")
-
 
     sys.stdout.write("\033[K")
     print("Finished installation")

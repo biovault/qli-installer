@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     atexit.register(reset_terminal_settings)
 
-    semver_pattern = re.compile("([56]{1})\.(\d+).(\d+)")
+    semver_pattern = re.compile(r"([56]{1})\.(\d+).(\d+)")
 
     def semver_string(string):
         m = semver_pattern.match(string)
@@ -100,6 +100,13 @@ if __name__ == "__main__":
         choices=["gcc_64", "linux_gcc_64"],
         help="supported architectures",
     )
+    linuxParser.add_argument(
+        "-t",
+        "--thin",
+        choices=["no"],
+        default="no",
+        help="Optional request to extract thin package - no choice in linux",
+    )
 
     macParser = argparse.ArgumentParser(
         description="Install for Mac", parents=[baseParser]
@@ -107,6 +114,13 @@ if __name__ == "__main__":
     macParser.add_argument("target", choices=["desktop", "ios"], help="target platform")
     macParser.add_argument(
         "-a", "--arch", choices=["clang_64", "ios"], help="supported architectures"
+    )
+    macParser.add_argument(
+        "-t",
+        "--thin",
+        choices=["no", "arm64", "x86_64"],
+        default="no",
+        help="Optional request to extract thin package",
     )
 
     windowsParser = argparse.ArgumentParser(
@@ -128,6 +142,13 @@ if __name__ == "__main__":
         ],
         help="supported architectures",
     )
+    windowsParser.add_argument(
+        "-t",
+        "--thin",
+        choices=["no"],
+        default="no",
+        help="Optional request to extract thin package - no choice in windows",
+    )
 
     args = baseParser.parse_known_args()
     print(args)
@@ -139,5 +160,5 @@ if __name__ == "__main__":
         os_args = macParser.parse_args()
     elif args[0].host_system == "linux":
         os_args = linuxParser.parse_args()
-
+    print(f"os args {os_args}")
     install_qt(vars(args[0]), vars(os_args))
