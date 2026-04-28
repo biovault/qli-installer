@@ -170,7 +170,7 @@ class QtConan(ConanFile):
         common_args["packages"] = [
             pkg for pkg in self._submodules if self.options.get_safe(pkg)
         ]
-        common_args["thin"] = make_thin
+        os_args["thin"] = make_thin
         print("Packages to install: ", common_args["packages"])
 
         os_args["target"] = self.options.target
