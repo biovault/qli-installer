@@ -68,7 +68,7 @@ class QtConan(ConanFile):
     homepage = "https://www.qt.io"
     license = "MIT"
     author = "Baldur van Lew <b.van_lew@lumc.nl>"
-    exports = ["LICENSE.md", "installutils.py", "__init__.py"]
+    exports = ["LICENSE.md", "installutils.py", "__init__.py", "macos_folder2thin.sh"]
     settings = "os", "arch", "compiler", "build_type"
 
     options = dict(
