@@ -89,7 +89,7 @@ class QtConan(ConanFile):
             "qt5compat": [True, False],
             "multimedia": [True, False],
             "serialport": [True, False],
-            "make_thin": ["no", "arm64", "x86_64"],
+            "thin": ["no", "arm64", "x86_64"],
         }
     )
     no_copy_source = True
@@ -111,7 +111,7 @@ class QtConan(ConanFile):
             "qt5compat": True,
             "multimedia": True,
             "serialport": True,
-            "make_thin": "arm64",
+            "thin": "arm64",
         }
     )
 
@@ -156,7 +156,7 @@ class QtConan(ConanFile):
             arch_key = "Linux"
         elif self.settings.os == "Macos":
             arch_key = "Macos"
-            make_thin = str(self.options.get_safe("make_thin"))
+            make_thin = str(self.options.get_safe("thin"))
         else:
             arch_key = (
                 str(self.settings.os)
@@ -170,7 +170,7 @@ class QtConan(ConanFile):
         common_args["packages"] = [
             pkg for pkg in self._submodules if self.options.get_safe(pkg)
         ]
-        common_args["make_thin"] = make_thin
+        common_args["thin"] = make_thin
         print("Packages to install: ", common_args["packages"])
 
         os_args["target"] = self.options.target
