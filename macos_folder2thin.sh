@@ -8,7 +8,7 @@ if [ $# -ne 2 ]; then
     echo "this may be either arm64 or x86_64"
     exit 1
 fi
-find ./$1 -type f \
+find $1 -type f \
   | while read -r f; do
       info=$(lipo -info "$f" 2>/dev/null) || continue
       [[ "$info" == *"Non-fat"* ]] && continue

@@ -40,6 +40,7 @@ import tempfile
 import platform
 import urllib.request
 import subprocess
+from pathlib import Path
 
 # Support packages are similar to but are not addons
 support_packages = [
@@ -132,7 +133,7 @@ def findPackage(
     return package_desc, full_version, archives, archives_url
 
 
-def install_archives(archives, archives_url, full_version, make_thin):
+def install_archives(archives, archives_url, full_version):
     for archive in archives:
         url = f"{archives_url}{full_version}{archive}"
 
@@ -143,17 +144,23 @@ def install_archives(archives, archives_url, full_version, make_thin):
         sys.stdout.write("\033[K")
         print(f"Extracting {archive}...")  # , end="\r")
         if platform.system() == "Windows":
-            os.system("7z x package.7z -opackage >NUL")
+            os.system("7z x package.7z >NUL")
         else:
-            os.system("7z x package.7z -opackage 1>/dev/null")
-            if make_thin != "no":
-                print(f"Extracting arch {make_thin} from package")
-                subprocess.run(
-                    [f"./macos_folder2thin.sh package {make_thin}"],
-                    shell=True,
-                    check=True,
-                )
+            os.system("7z x package.7z 1>/dev/null")
+
         os.remove("package.7z")
+
+
+def thin_archives(make_thin):
+    if platform.system() == "Darwin":
+        if make_thin != "no":
+            print(f"Extracting arch {make_thin} from package")
+            script_path = Path(Path(__file__).absolute().parent, "macos_folder2thin.sh")
+            subprocess.run(
+                [f"{str(script_path)} . {make_thin}"],
+                shell=True,
+                check=True,
+            )
 
 
 def install_qt(common_args, os_args):
@@ -316,7 +323,7 @@ def install_qt(common_args, os_args):
         print("Packages:  ", package_list)
     print("*****************************************************")
 
-    install_archives(archives, archives_url, full_version, make_thin)
+    install_archives(archives, archives_url, full_version)
 
     if package_list:
         print("*****************************************************")
@@ -333,7 +340,7 @@ def install_qt(common_args, os_args):
             package_desc, full_version, archives, archives_url = findPackage(
                 qt_ver_num, arch, packages_url, update_xml, package_name
             )
-            install_archives(archives, archives_url, full_version, make_thin)
+            install_archives(archives, archives_url, full_version)
         print("*****************************************************")
 
     # qt webengine is not listed like the other plugins for > 6.8 (also qt pdf)
@@ -379,8 +386,8 @@ def install_qt(common_args, os_args):
             package_desc, full_version, archives, archives_url = findPackage(
                 qt_ver_num, arch, extension_url, update_xml, extension_name, True
             )
-            install_archives(archives, archives_url, full_version, make_thin)
+            install_archives(archives, archives_url, full_version)
         print("*****************************************************")
-
+    thin_archives(make_thin)
     sys.stdout.write("\033[K")
     print("Finished installation")
