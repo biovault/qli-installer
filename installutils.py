@@ -41,6 +41,7 @@ import platform
 import urllib.request
 import subprocess
 from pathlib import Path
+from packaging.version import Version
 
 # Support packages are similar to but are not addons
 support_packages = [
@@ -67,6 +68,7 @@ def findPackage(
     update_xml=None,
     packname=None,
     is_extension=False,
+    debug_info=False,
 ):
     print(f"findPackage: {qt_ver_num}, {arch}, {packages_url}, {packname}")
     package_desc = ""
@@ -90,14 +92,26 @@ def findPackage(
         addon_infix = ""
 
     versionsList = []
-    if packname:
-        versionsList.append(
-            f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.{arch}"
-        )
-        versionsList.append(f"qt.{qt_ver_num}.{addon_infix}{packname}.{arch}")
+    if debug_info:
+        if packname:  #  A package is an addon
+            versionsList.append(
+                f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.debug_info.{arch}"
+            )
+            versionsList.append(
+                f"qt.{qt_ver_num}.{addon_infix}{packname}.debug_info.{arch}"
+            )
+        else:  # The alternative is the bse package
+            versionsList.append(f"qt.qt{version_major}.{qt_ver_num}.debug_info.{arch}")
+            versionsList.append(f"qt.{qt_ver_num}.debug_info.{arch}")
     else:
-        versionsList.append(f"qt.qt{version_major}.{qt_ver_num}.{arch}")
-        versionsList.append(f"qt.{qt_ver_num}.{arch}")
+        if packname:  #  A package is an addon
+            versionsList.append(
+                f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.{arch}"
+            )
+            versionsList.append(f"qt.{qt_ver_num}.{addon_infix}{packname}.{arch}")
+        else:  # The alternative is the bse package
+            versionsList.append(f"qt.qt{version_major}.{qt_ver_num}.{arch}")
+            versionsList.append(f"qt.{qt_ver_num}.{arch}")
 
     if is_extension:
         versionsList = [f"extensions.{packname}.{qt_ver_num}.{arch}"]
@@ -231,8 +245,10 @@ def install_qt(common_args, os_args):
     # */android:       "android_x86", "android_armv7"
     arch = ""
     gcc_arch = "gcc_64"
+    get_dSYMs = False
     # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
-    if version_major == "6" and int(version_minor) >= 7:
+    check_version = Version(f"{version_major}.{version_minor}")
+    if check_version >= Version("6.7"):
         print("Qt 6.7 or greater")
         if os_name == "linux":
             gcc_arch = "linux_gcc_64"
@@ -252,7 +268,7 @@ def install_qt(common_args, os_args):
                 arch = "win32_msvc2019_64"
             # as far as 6.7.2 no msvc 2022 in qt download
             # from 6.8 only msvc 2022
-            if version_major == "6" and int(version_minor) < 8:
+            if check_version >= Version("6.0") and check_version < Version("6.8"):
                 print(f"Revert to msvc 2019 for arch : {arch} at version: {version}")
                 if arch == "win64_msvc2022_64":
                     arch = "win64_msvc2019_64"
@@ -261,6 +277,8 @@ def install_qt(common_args, os_args):
         arch = gcc_arch
     elif os_name == "mac" and target == "desktop":
         arch = "clang_64"
+        if check_version >= Version("6.9"):
+            get_dSYMs = True  # since 6.9 dSYMs for macos are in separate downloads
     elif os_name == "mac" and target == "ios":
         arch = "ios"
 
@@ -284,7 +302,7 @@ def install_qt(common_args, os_args):
 
     # For qt 6.8 and up the xml is in a further nested folder
     # and qt webengine has to be handled differently
-    if version_major == "6" and int(version_minor) >= 8:
+    if check_version >= Version("6.8"):
         packages_url += f"qt{version_major}_{qt_ver_num}" + "/"
         qt_extensions = ["webengine", "pdf"]
 
@@ -325,6 +343,12 @@ def install_qt(common_args, os_args):
 
     install_archives(archives, archives_url, full_version)
 
+    if get_dSYMs:
+        package_desc, full_version, archives, archives_url = findPackage(
+            qt_ver_num, arch, packages_url, update_xml, True
+        )
+        install_archives(archives, archives_url, full_version)
+
     if package_list:
         print("*****************************************************")
         print("Installing extra packages {}".format(package_desc))
@@ -341,6 +365,11 @@ def install_qt(common_args, os_args):
                 qt_ver_num, arch, packages_url, update_xml, package_name
             )
             install_archives(archives, archives_url, full_version)
+            if get_dSYMs:
+                package_desc, full_version, archives, archives_url = findPackage(
+                    qt_ver_num, arch, packages_url, update_xml, package_name, True
+                )
+                install_archives(archives, archives_url, full_version)
         print("*****************************************************")
 
     # qt webengine is not listed like the other plugins for > 6.8 (also qt pdf)
@@ -387,6 +416,11 @@ def install_qt(common_args, os_args):
                 qt_ver_num, arch, extension_url, update_xml, extension_name, True
             )
             install_archives(archives, archives_url, full_version)
+            if get_dSYMs:
+                package_desc, full_version, archives, archives_url = findPackage(
+                    qt_ver_num, arch, extension_url, update_xml, extension_name, True
+                )
+                install_archives(archives, archives_url, full_version)
         print("*****************************************************")
     thin_archives(make_thin)
     sys.stdout.write("\033[K")
