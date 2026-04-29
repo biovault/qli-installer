@@ -73,9 +73,9 @@ jobs:
           submodules: recursive
 
       - name: Setup python 3 version
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Prepare build environment
         uses: ./.github/actions/conan_build_setup
@@ -103,7 +103,7 @@ jobs:
             conan profile update settings.compiler.version=${{ matrix.build-cversion }} action_build
             conan profile update settings.compiler.libcxx=${{ matrix.build-libcxx }} action_build
           fi
-            
+          pip install packaging  
         shell: bash
 
       - name: Create package
