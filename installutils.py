@@ -252,6 +252,10 @@ def install_qt(common_args, os_args):
         print("Qt 6.7 or greater")
         if os_name == "linux":
             gcc_arch = "linux_gcc_64"
+        if os_name == "mac":
+            if check_version >= Version("6.9"):
+                print("Add dSYM retrieval")
+                get_dSYMs = True  # since 6.9 dSYMs for macos are in separate downloads
 
     if os_args["arch"]:
         arch = os_args["arch"]
@@ -277,8 +281,7 @@ def install_qt(common_args, os_args):
         arch = gcc_arch
     elif os_name == "mac" and target == "desktop":
         arch = "clang_64"
-        if check_version >= Version("6.9"):
-            get_dSYMs = True  # since 6.9 dSYMs for macos are in separate downloads
+
     elif os_name == "mac" and target == "ios":
         arch = "ios"
 
