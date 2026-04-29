@@ -344,6 +344,7 @@ def install_qt(common_args, os_args):
     install_archives(archives, archives_url, full_version)
 
     if get_dSYMs:
+        print("Get main package dSYMs")
         package_desc, full_version, archives, archives_url = findPackage(
             qt_ver_num, arch, packages_url, update_xml, True
         )
@@ -366,6 +367,7 @@ def install_qt(common_args, os_args):
             )
             install_archives(archives, archives_url, full_version)
             if get_dSYMs:
+                print(f"Get package {package_name} dSYMs")
                 package_desc, full_version, archives, archives_url = findPackage(
                     qt_ver_num, arch, packages_url, update_xml, package_name, True
                 )
@@ -417,6 +419,7 @@ def install_qt(common_args, os_args):
             )
             install_archives(archives, archives_url, full_version)
             if get_dSYMs:
+                print(f"Get extension {extension_name} dSYMs")
                 package_desc, full_version, archives, archives_url = findPackage(
                     qt_ver_num, arch, extension_url, update_xml, extension_name, True
                 )
