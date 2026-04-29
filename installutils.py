@@ -95,12 +95,12 @@ def findPackage(
     if debug_info:
         if packname:  #  A package is an addon
             versionsList.append(
-                f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.debug_info.{arch}"
+                f"qt.qt{version_major}.{qt_ver_num}.{addon_infix}{packname}.debug_information.{arch}"
             )
             versionsList.append(
-                f"qt.{qt_ver_num}.{addon_infix}{packname}.debug_info.{arch}"
+                f"qt.{qt_ver_num}.{addon_infix}{packname}.debug_information.{arch}"
             )
-        else:  # The alternative is the bse package
+        else:  # The alternative is the base package
             versionsList.append(f"qt.qt{version_major}.{qt_ver_num}.debug_info.{arch}")
             versionsList.append(f"qt.{qt_ver_num}.debug_info.{arch}")
     else:
