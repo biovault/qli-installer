@@ -27,9 +27,9 @@
 # It allow the retrieval of exttra packages.
 # Usage example including extra packages:
 #
-# python qli-installer.py 5.12.0 windows desktop --arch win64_msvc2017_64 -p webengine script
+# python qli-installer.py 6.10.3 windows desktop -a win64_msvc2022_64 -p webchannel webengine 
 #
-#  The code is designed to work in an environment with conan package manage installed
+# The code is designed to work in an environment with conan package manage installed
 
 import sys
 import os
@@ -239,14 +239,13 @@ def install_qt(common_args, os_args):
     # linux/desktop:   "gcc_64"
     # mac/desktop:     "clang_64"
     # mac/ios:         "ios"
-    # windows/desktop: "win64_msvc2019_64", "win64_msvc2017_64", "win64_msvc2015_64",
-    #                    "win32_msvc2015", "win32_msvc2017",
-    #                  "win32_msvc2015", "win32_mingw53"
-    # */android:       "android_x86", "android_armv7"
+    # windows/desktop: "win64_msvc2022_64", "win64_msvc2022_arm64_cross_compiled",
+    #                   "win64_mingw", "win64_llvm_mingw",
+    # */android:       "android_x86", "android_x86_64", "android_armv7", "android_armv8a"
     arch = ""
     gcc_arch = "gcc_64"
     get_dSYMs = False
-    # From 6.7 onward the label for gcc64 arch has added the linux qualifier on linux
+    # From 6.7 onward the label for gcc_64 arch has added the linux qualifier on linux
     check_version = Version(f"{version_major}.{version_minor}")
     if check_version >= Version("6.7"):
         print("Qt 6.7 or greater")
