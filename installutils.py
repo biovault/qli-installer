@@ -45,7 +45,6 @@ from packaging.version import Version
 
 # Support packages are similar to but are not addons
 support_packages = [
-    "qt5compat",
     "qtshadertools",
     "qtquick3d",
     "qtquicktimeline",
